@@ -3,6 +3,7 @@ import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 import { runMigrations } from './db/migrate'
 import { closeDb } from './db/client'
+import { registerIpcHandlers } from './ipc/handlers'
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 
@@ -42,8 +43,9 @@ app.whenReady().then(() => {
     app.setAppUserModelId('com.zettelkasten')
   }
 
-  createWindow()
   runMigrations()
+  registerIpcHandlers()
+  createWindow()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
